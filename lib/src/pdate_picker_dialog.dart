@@ -6,7 +6,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/src/date/shamsi_date.dart';
-
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'pcalendar_date_picker.dart';
 import 'pdate_picker_common.dart';
 import 'pdate_picker_header.dart';
@@ -239,7 +239,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
   }
 
   void _handleOk() {
-    if (_entryMode == PDatePickerEntryMode.input ||  _entryMode == DatePickerEntryMode.inputOnly) {
+    if (_entryMode == PDatePickerEntryMode.input ||
+        _entryMode == DatePickerEntryMode.inputOnly) {
       final FormState form = _formKey.currentState!;
       if (!form.validate()) {
         setState(() => _autoValidate = true);
@@ -268,6 +269,8 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         case PDatePickerEntryMode.calendarOnly:
         case PDatePickerEntryMode.inputOnly:
           assert(false, 'Can not change entry mode from _entryMode');
+          break;
+        default:
           break;
       }
     });
@@ -313,15 +316,21 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
         math.min(MediaQuery.of(context).textScaleFactor, 1.3);
 
     final String dateText = _selectedDate != null
-        ? _selectedDate!.formatMediumDate()
+        ? _selectedDate!.formatMediumDate().toPersianDigit()
         // TODO(darrenaustin): localize 'Date'
         : 'Date';
     final Color dateColor = colorScheme.brightness == Brightness.light
         ? colorScheme.onPrimary
         : colorScheme.onSurface;
     final TextStyle? dateStyle = orientation == Orientation.landscape
-        ? textTheme.subtitle1?.copyWith(color: dateColor)
-        : textTheme.headline5?.copyWith(color: dateColor);
+        ? textTheme.subtitle1?.copyWith(
+            color: dateColor,
+            // fontFamily: 'vazirmatn',
+          )
+        : textTheme.headline5?.copyWith(
+            color: dateColor,
+            // fontFamily: 'vazirmatn',
+          );
 
     final Widget actions = ButtonBar(
       buttonTextTheme: ButtonTextTheme.primary,
@@ -329,16 +338,22 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
       children: <Widget>[
         TextButton(
           onPressed: _handleCancel,
-          child: Text(widget.cancelText ?? 'لغو'),
+          child: Text(
+            widget.cancelText ?? 'لغو',
+            // style: const TextStyle(fontFamily: 'vazirmatn'),
+          ),
         ),
         TextButton(
           onPressed: _handleOk,
-          child: Text(widget.confirmText ?? 'تایید'),
+          child: Text(
+            widget.confirmText ?? 'تایید',
+            // style: const TextStyle(fontFamily: 'vazirmatn'),
+          ),
         ),
       ],
     );
 
-    PCalendarDatePicker pCalendarDatePicker () {
+    PCalendarDatePicker pCalendarDatePicker() {
       return PCalendarDatePicker(
         key: _calendarPickerKey,
         initialDate: _selectedDate!,
@@ -412,7 +427,6 @@ class _DatePickerDialogState extends State<_DatePickerDialog> {
     }
 
     final Widget header = PDatePickerHeader(
-      // TODO(darrenaustin): localize 'SELECT DATE'
       helpText: widget.helpText ?? 'انتخاب تاریخ',
       titleText: dateText,
       titleStyle: dateStyle,

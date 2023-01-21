@@ -94,6 +94,7 @@ class PDatePickerHeader extends StatelessWidget {
 
     final TextStyle? helpStyle = textTheme.overline?.copyWith(
       color: onPrimarySurfaceColor,
+      // fontFamily: 'vazirmatn',
     );
 
     final Text help = Text(

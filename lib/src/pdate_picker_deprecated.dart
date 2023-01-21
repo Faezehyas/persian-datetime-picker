@@ -4,7 +4,7 @@
 
 import 'dart:async';
 import 'dart:math' as math;
-
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:flutter/gestures.dart' show DragStartBehavior;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -427,6 +427,8 @@ class _MonthPickerState extends State<PMonthPicker>
     );
     _chevronOpacityAnimation =
         _chevronOpacityController!.drive(_chevronOpacityTween);
+
+    _timer = Timer(Duration.zero,(){});
   }
 
   @override
@@ -731,7 +733,7 @@ class _YearPickerState extends State<PYearPicker> {
           child: Center(
             child: Semantics(
               selected: isSelected,
-              child: Text(year.toString(), style: itemStyle),
+              child: Text(year.toString().toPersianDigit(), style: itemStyle),
             ),
           ),
         );

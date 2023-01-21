@@ -3,7 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:math' as math;
-
+import 'package:persian_number_utility/persian_number_utility.dart';
 import './pdate_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -49,7 +49,7 @@ const double _monthNavButtonsWidth = 108.0;
 ///    time picker.
 ///
 class PCalendarDatePicker extends StatefulWidget {
-  /// Creates a calender date picker
+  /// Creates a calendar date picker
   ///
   /// It will display a grid of days for the [initialDate]'s month. The day
   /// indicated by [initialDate] will be selected.
@@ -265,7 +265,7 @@ class _CalendarDatePickerState extends State<PCalendarDatePicker> {
         // Put the mode toggle button on top so that it won't be covered up by the _MonthPicker
         _DatePickerModeToggleButton(
           mode: _mode,
-          title: formatMonthYear(_currentDisplayedMonthDate!),
+          title: formatYearNew(_currentDisplayedMonthDate!),
           onTitlePressed: () {
             // Toggle the day/year mode.
             _handleModeChanged(_mode == PDatePickerMode.day
@@ -352,6 +352,7 @@ class _DatePickerModeToggleButtonState
               button: true,
               child: SizedBox(
                 height: _subHeaderHeight,
+                width: 80,
                 child: InkWell(
                   onTap: widget.onTitlePressed,
                   child: Padding(
@@ -548,7 +549,8 @@ class _MonthPickerState extends State<_MonthPicker> {
   Widget build(BuildContext context) {
     final String previousTooltipText =
         'ماه قبل ${_previousMonthDate.formatMonthYear()}';
-    final String nextTooltipText = 'ماه بعد ${_nextMonthDate.formatMonthYear()}';
+    final String nextTooltipText =
+        'ماه بعد ${_nextMonthDate.formatMonthYear()}';
     final Color controlColor =
         Theme.of(context).colorScheme.onSurface.withOpacity(0.60);
 
@@ -559,14 +561,20 @@ class _MonthPickerState extends State<_MonthPicker> {
             padding: const EdgeInsetsDirectional.only(start: 16, end: 4),
             height: _subHeaderHeight,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Spacer(),
+                // const Spacer(
+                //   flex: 2,
+                // ),
                 IconButton(
                   icon: const Icon(Icons.chevron_left),
                   color: controlColor,
                   tooltip: _isDisplayingFirstMonth ? null : previousTooltipText,
                   onPressed:
                       _isDisplayingFirstMonth ? null : _handlePreviousMonth,
+                ),
+                Text(
+                  formatMonthNew(_currentMonth!),
                 ),
                 IconButton(
                   icon: const Icon(Icons.chevron_right),
@@ -948,7 +956,7 @@ class _YearPickerState extends State<_YearPicker> {
         child: Center(
           child: Semantics(
             selected: isSelected,
-            child: Text(year.toString(), style: itemStyle),
+            child: Text(year.toString().toPersianDigit(), style: itemStyle),
           ),
         ),
       ),

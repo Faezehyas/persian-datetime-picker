@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'pdate_utils.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 
 String formatTimeOfDay(TimeOfDay timeOfDay,
     {bool alwaysUse24HourFormat = false}) {
@@ -57,7 +57,7 @@ String _formatTwoDigitZeroPad(int number) {
 @override
 String formatMinute(TimeOfDay timeOfDay) {
   final int minute = timeOfDay.minute;
-  return minute < 10 ? '0$minute' : minute.toString();
+  return minute < 10 ? '0$minute' : minute.toString().toPersianDigit();
 }
 
 TimeOfDayFormat timeOfDayFormat({bool alwaysUse24HourFormat = false}) {

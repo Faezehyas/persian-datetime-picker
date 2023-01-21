@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:persian_datetime_picker/src/date/shamsi_date.dart';
-
 import 'pdate_picker_common.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 
 /// Returns a [Jalali] with just the date of the original, but no time set.
 Jalali dateOnly(Jalali date) {
@@ -134,11 +134,11 @@ List<String> narrowWeekdays = [
 
 List<String> shortDayName = [
   'شنبه',
-  '۱شنبه',
-  '۲شنبه',
-  '۳شنبه',
-  '۴شنبه',
-  '۵شنبه',
+  'یکشنبه',
+  'دوشنبه',
+  'سه‌شنبه',
+  'چهارشنبه',
+  'پنج‌شنبه',
   'جمعه',
 ];
 
@@ -175,7 +175,9 @@ String formatRangeEndDate(MaterialLocalizations localizations,
 }
 
 String formatDecimal(int number) {
-  if (number > -1000 && number < 1000) return number.toString();
+  if (number > -1000 && number < 1000) {
+    return number.toString().toPersianDigit();
+  }
 
   final String digits = number.abs().toString();
   final StringBuffer result = StringBuffer(number < 0 ? '-' : '');
@@ -184,15 +186,27 @@ String formatDecimal(int number) {
     result.write(digits[i]);
     if (i < maxDigitIndex && (maxDigitIndex - i) % 3 == 0) result.write(',');
   }
-  return result.toString();
+  return result.toString().toPersianDigit();
 }
 
 String formatYear(Jalali date) {
   return date.formatter.yy;
 }
 
+String formatYearNew(Jalali date) {
+  return date.formatter.yyyy;
+}
+
 String formatMonthYear(Jalali date) {
   return '${date.formatter.mm} ${date.formatter.yy}';
+}
+
+String formatMonthYearNew(Jalali date) {
+  return '${JalaliDate.months[date.month - 1]} ${date.formatter.yyyy}';
+}
+
+String formatMonthNew(Jalali date) {
+  return JalaliDate.months[date.month - 1];
 }
 
 String formatFullDate(Jalali date) {
@@ -265,7 +279,7 @@ extension JalaliExt on Jalali {
 
   String _twoDigits(int n) {
     if (n >= 10) return '$n';
-    return '0$n';
+    return '0$n'.toPersianDigit();
   }
 
   ///formats
@@ -287,7 +301,8 @@ extension JalaliExt on Jalali {
 
   String toJalaliDateTime() {
     final f = formatter;
-    return '${f.yyyy}-${f.mm}-${f.dd} ${_twoDigits(hour)}:${_twoDigits(minute)}:${_twoDigits(second)}';
+    return '${f.yyyy}-${f.mm}-${f.dd} ${_twoDigits(hour)}:${_twoDigits(minute)}:${_twoDigits(second)}'
+        .toPersianDigit();
   }
 
   String formatYear() {
@@ -307,12 +322,12 @@ extension JalaliExt on Jalali {
 
   String formatMonthYear() {
     final f = formatter;
-    return '${f.yyyy}/${f.mm}';
+    return '${f.yyyy}/${f.mm}'.toPersianDigit();
   }
 
   String formatShortMonthDay() {
     final f = formatter;
-    return '${f.dd} ${f.mN}';
+    return '${f.dd} ${f.mN}'.toPersianDigit();
   }
 }
 
@@ -321,5 +336,3 @@ extension DateTimeExt on DateTime {
     return Jalali.fromDateTime(this);
   }
 }
-
-

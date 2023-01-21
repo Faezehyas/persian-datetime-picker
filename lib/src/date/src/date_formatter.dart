@@ -4,6 +4,7 @@
 
 library date_formatter;
 
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'date.dart';
 
 /// super class for Jalali and Gregorian Date formatter
@@ -24,7 +25,7 @@ abstract class DateFormatter {
       throw StateError('date.year = $year < 0');
     }
 
-    return year.toString();
+    return year.toString().toPersianDigit();
   }
 
   /// year number string ensured to have length of 4
@@ -45,15 +46,15 @@ abstract class DateFormatter {
 
     switch (str.length) {
       case 4:
-        return str;
+        return str.toPersianDigit();
       case 3:
-        return '0$str';
+        return '0$str'.toPersianDigit();
       case 2:
-        return '00$str';
+        return '00$str'.toPersianDigit();
       case 1:
-        return '000$str';
+        return '000$str'.toPersianDigit();
       default: // case: 0
-        return '0000';
+        return '0000'.toPersianDigit();
     }
   }
 
@@ -72,7 +73,7 @@ abstract class DateFormatter {
     }
 
     final String str = (year % 100).toString();
-    return str.length == 1 ? '0$str' : str;
+    return str.length == 1 ? '0$str'.toPersianDigit() : str.toPersianDigit();
   }
 
   /// month number string whatever length it has
